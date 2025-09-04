@@ -14,8 +14,18 @@ jobs:
       - name: Clonar repositorio
         uses: actions/checkout@v4
 
+      - name: Instalar JMeter
+        run: |
+          sudo apt update
+          sudo apt install -y openjdk-11-jre wget unzip
+          wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.5.tgz
+          tar -xzf apache-jmeter-5.5.tgz
+          echo "JMETER_HOME=$(pwd)/apache-jmeter-5.5" >> $GITHUB_ENV
+          echo "$(pwd)/apache-jmeter-5.5/bin" >> $GITHUB_PATH
+
       - name: Ejecutar pruebas JMeter
-        run: jmeter -n -t PruebaPromociones.jmx -l resultados.jtl -e -o reportes/
+        run: |
+          jmeter -n -t TestPlans/jsonplaceholder_prueba.jmx -l resultado.jtl
 
       - name: Guardar resultados como artefacto
         uses: actions/upload-artifact@v4
