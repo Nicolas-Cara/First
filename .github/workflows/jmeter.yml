@@ -20,7 +20,7 @@ jobs:
       - name: Run JMeter test (PerfAction)
         uses: QAInsights/PerfAction@v5.6.2
         with:
-          test-plan-path: ./TestPlans/jsonplaceholder_prueba.jmx
+          test-plan-path: ./TestPlans/PruebaPomociones.jmx
           args: "-e -o ./reports/html/"
 
       - name: Upload JTL results
