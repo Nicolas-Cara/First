@@ -1,24 +1,36 @@
 name: Pruebas JMeter
 
 on:
+  workflow_dispatch:
   push:
-    branches:
-      - main
+    paths:
+      - "TestPlans/**.jmx"
+      - ".github/workflows/jmeter.yml"
 
 jobs:
-  load_test:
+  run-jmeter:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
+      - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Run JMeter tests
-        run: |
-          jmeter -n -t TestPlans/jsonplaceholder_prueba.jmx.jmx -l resultados.jtl -e -o reportes
+      - name: Create reports dir
+        run: mkdir -p reports/html
 
-      - name: Upload JMeter test results
+      - name: Run JMeter test (PerfAction)
+        uses: QAInsights/PerfAction@v5.6.2
+        with:
+          test-plan-path: ./TestPlans/jsonplaceholder_prueba.jmx
+          args: "-e -o ./reports/html/"
+
+      - name: Upload JTL results
         uses: actions/upload-artifact@v4
         with:
           name: jmeter-results
-          path: test-results.jtl
+          path: result.jtl
+
+      - name: Upload HTML report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jmeter-html-report
+          path: reports
