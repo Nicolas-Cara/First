@@ -14,11 +14,8 @@ jobs:
       - name: Clonar repositorio
         uses: actions/checkout@v3
 
-      - name: Ejecutar pruebas JMeter con action
-        uses: QAInsights/jmeter-action@v3.1.0
-        with:
-          test-plan-path: TestPlans/jsonplaceholder_prueba.jmx
-          args: "-n -l resultado.jtl"
+      - name: Ejecutar pruebas JMeter
+        run: jmeter -n -t PruebaPromociones.jmx -l resultados.jtl -e -o reportes/
 
       - name: Guardar resultados como artefacto
         uses: actions/upload-artifact@v3
