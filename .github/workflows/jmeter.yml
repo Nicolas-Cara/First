@@ -1,0 +1,24 @@
+name: Pruebas JMeter
+
+on:
+  push:
+    paths:
+      - "TestPlans/**"
+  workflow_dispatch:
+
+jobs:
+  jmeter-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar repositorio
+        uses: actions/checkout@v3
+
+      - name: Ejecutar pruebas JMeter
+        run: jmeter -n -t TestPlans/jsonplaceholder_prueba.jmx -l resultado.jtl
+
+      - name: Guardar resultados como artefacto
+        uses: actions/upload-artifact@v3
+        with:
+          name: resultados-jmeter
+          path: resultado.jtl
